@@ -5,6 +5,9 @@
   }
 }
 
+body {
+  background-color: red;
+}
 .container {
   background: url("./../assets/6704_b.png") no-repeat;
 }
@@ -13,13 +16,17 @@
   background: url("./../assets/6704_y.png") no-repeat;
 }
 
+.tannzaku {
+  transform: rotate(90);
+}
+
 .todo_container {
-  width: 100%;
-  margin: "0 auto";
   display: flex;
-  flex-direction: column;
-  justify-content: right;
+  height: 100%;
+  /* flex-direction: column; */
+  /* justify-content: right; */
   background-color: #61dafb;
+  /* overflow-x: scroll; */
 }
 
 .App {

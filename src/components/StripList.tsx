@@ -1,30 +1,54 @@
-import { Box, ScaleFade } from "@chakra-ui/react";
+import { Box, ScaleFade, Spinner, useTimeout } from "@chakra-ui/react";
 import { motion } from "framer-motion";
-import React from "react";
+import React, { useEffect } from "react";
 import { useGetStrips } from "../database/getStrips";
+import Tannzaku from "./Tannzaku";
 type Props = {};
 
 const StripList: React.FC<Props> = () => {
   const strips = useGetStrips();
-  if (strips === undefined) return <p>loading...</p>;
+  const height = window.innerHeight;
 
+  if (strips === undefined) {
+    return (
+      <div
+        style={{
+          display: "flex",
+          height: height,
+          paddingTop: 64,
+          justifyContent: "center",
+        }}
+      >
+        <Spinner size="xl" thickness="4px" speed="1s" />
+      </div>
+    );
+  }
   return (
-    <div className="todo_container" style={{ paddingBottom: 100 }}>
+    <div
+      style={{
+        padding: 12,
+        display: "flex",
+        flexDirection: "row",
+        overflowX: "scroll",
+        height: height + 100,
+        overflowY: "hidden",
+      }}
+    >
       {strips.map((strip, index) => (
         <motion.div
           initial={{ scale: 0, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
           transition={{ duration: 0.6, delay: index * 0.1, type: "spring" }}
-          style={{ width: 500, alignSelf: "center" }}
+          style={{
+            margin: 4,
+          }}
         >
-          <Box p="6" boxShadow="md" rounded="lg" m="2" bg="white">
-            <Box fontWeight="semibold" as="h4" noOfLines={1}>
-              {strip.name}
-            </Box>
-            <Box>{strip.text}</Box>
+          <Box boxShadow="xl" position="relative">
+            <Tannzaku name={strip.name} text={strip.text} />
           </Box>
         </motion.div>
       ))}
+      {/* </div> */}
     </div>
   );
 };

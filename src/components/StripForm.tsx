@@ -1,4 +1,5 @@
 import {
+  AspectRatio,
   Box,
   Button,
   Fade,
@@ -7,30 +8,32 @@ import {
   Modal,
   ModalContent,
   ModalOverlay,
+  Textarea,
   useDisclosure,
+  useToast,
 } from "@chakra-ui/react";
 import { motion } from "framer-motion";
-
+import "./App.css";
 import React, { useState } from "react";
 import { addStrip } from "../database/addStrips";
+import Tannzaku from "./Tannzaku";
+import AppButton from "./Button";
 type Props = {};
 
 const StripForm: React.FC<Props> = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
-
   const [name, setName] = useState("");
   const [text, setText] = useState("");
-  const [opacitySubmit, setOpacitySubmit] = useState(0);
+  const [isConfirmOpen, setIsConfirmOpen] = useState(false);
 
   return (
     <div>
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
-        <ModalContent>
-          <div
-            // className="container"
-            style={styles.container}
-          >
+        <ModalContent
+          style={{ width: "90%", display: "flex", alignSelf: "center" }}
+        >
+          <div style={styles.container}>
             <Box
               fontSize={32}
               textAlign="center"
@@ -48,7 +51,7 @@ const StripForm: React.FC<Props> = () => {
               value={name}
               placeholder="企業名"
             />
-            <Input
+            <Textarea
               onChange={(event) => {
                 setText(event.target.value);
               }}
@@ -64,48 +67,79 @@ const StripForm: React.FC<Props> = () => {
               initial={{ opacity: 0 }}
               animate={{ opacity: name && text ? 1 : 0 }}
             >
-              <Button
-                disabled={name && text ? false : true}
-                style={styles.button}
-                bg="lightgreen"
+              <AppButton
+                text="次へ"
                 onClick={() => {
-                  addStrip({ name, text, id: "" }).then(() => {
-                    onClose();
-                    setName("");
-                    setText("");
-                  });
+                  onClose();
+                  setTimeout(() => {
+                    setIsConfirmOpen(true);
+                  }, 200);
                 }}
-              >
-                短冊を作成
-              </Button>
+              />
             </motion.div>
           </div>
         </ModalContent>
       </Modal>
-      <IconButton
-        bg="lightgreen"
-        colorScheme="green"
-        onClick={onOpen}
-        p={8}
-        rounded="full"
-        boxShadow="lg"
-        position="fixed"
-        right={8}
-        bottom={8}
-        icon={
-          <Box
-            alignItems="center"
-            display="flex"
-            fontWeight="semibold"
-            fontFamily="serif"
-            fontSize={24}
-            color="black"
-          >
-            短冊を作る
+      <div
+        style={{
+          position: "fixed",
+          bottom: 4,
+          right: 4,
+        }}
+      >
+        <AppButton text="短冊を作る" onClick={onOpen} />
+      </div>
+      <Modal
+        isOpen={isConfirmOpen}
+        onClose={() => {
+          setIsConfirmOpen(false);
+          setTimeout(() => {
+            onOpen();
+          }, 300);
+        }}
+      >
+        <ModalOverlay />
+        <ModalContent
+          style={{
+            width: 300,
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            padding: 24,
+          }}
+        >
+          <Box boxShadow="xl" m={2} position="relative">
+            <Tannzaku name={name} text={text} />
           </Box>
-        }
-        aria-label={""}
-      />
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "center",
+            }}
+          >
+            <AppButton
+              onClick={() => {
+                setIsConfirmOpen(false);
+                setTimeout(() => {
+                  onOpen();
+                }, 300);
+              }}
+              text="キャンセル"
+              variant="outline"
+            />
+            <AppButton
+              onClick={() => {
+                addStrip({ name, text, id: "" }).then(() => {
+                  setIsConfirmOpen(false);
+                  setName("");
+                  setText("");
+                });
+              }}
+              text="短冊を飾る"
+            />
+          </div>
+        </ModalContent>
+      </Modal>
     </div>
   );
 };
@@ -114,14 +148,10 @@ export default StripForm;
 const styles: { [key: string]: React.CSSProperties } = {
   header: { marginTop: 0, marginBottom: 0 },
   container: {
-    // width: 500,
-    // height: 1095,
     margin: "0 auto",
     display: "flex",
     flexDirection: "column",
-    justifyContent: "center",
     padding: 20,
-    backgroundColor: "white",
   },
   input: {
     border: "none",
