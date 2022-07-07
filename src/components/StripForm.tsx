@@ -49,11 +49,12 @@ const StripForm: React.FC<Props> = () => {
               }}
               style={styles.input}
               value={name}
-              placeholder="企業名"
+              placeholder="おなまえ"
             />
             <Textarea
               onChange={(event) => {
-                setText(event.target.value);
+                let tempText = event.target.value;
+                setText(tempText);
               }}
               style={styles.input}
               value={text}

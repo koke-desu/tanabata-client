@@ -14,7 +14,7 @@ const StripList: React.FC<Props> = () => {
       <div
         style={{
           display: "flex",
-          height: height,
+          height: height +100,
           paddingTop: 64,
           justifyContent: "center",
         }}
@@ -30,7 +30,7 @@ const StripList: React.FC<Props> = () => {
         display: "flex",
         flexDirection: "row",
         overflowX: "scroll",
-        height: height + 100,
+        height: height,
         overflowY: "hidden",
       }}
     >
@@ -42,6 +42,7 @@ const StripList: React.FC<Props> = () => {
           style={{
             margin: 4,
           }}
+          key={`tanabata-${strip.id}`}
         >
           <Box boxShadow="xl" position="relative">
             <Tannzaku name={strip.name} text={strip.text} />

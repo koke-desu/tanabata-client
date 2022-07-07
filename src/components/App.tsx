@@ -9,33 +9,43 @@ Amplify.configure(awsExports);
 
 const App = () => {
   const height = window.innerHeight;
+  const width = window.innerWidth;
   return (
     <ChakraProvider>
       <div style={{ width: "100vw", height: "100vh", overflow: "hidden" }}>
         <div
           className="wrapper"
           style={{
-            backgroundColor: "#61dafb",
             padding: 0,
             height: height + 100,
             overflowY: "hidden",
             flexDirection: "column",
           }}
         >
-          <Box
-            fontSize={32}
-            textAlign="center"
-            fontWeight="bold"
-            fontFamily="serif"
-            p={4}
-            bg="white"
-            width="100%"
-            boxShadow="lg"
-            zIndex={1}
-          >
-            短冊作成フォーム
+          <img
+            style={{
+              objectFit: "cover",
+              position: "absolute",
+              height: height,
+              zIndex: -1,
+            }}
+            src={
+              width > 512
+                ? require("../assets/haikei/yoko.png")
+                : require("../assets/haikei/tate.png")
+            }
+          />
+          <Box width="100%" boxShadow="lg" zIndex={10}>
+            <img
+              src={require("../assets/tannzakuList/たなバーチャル.jpg")}
+              style={{
+                width: "100%",
+                maxHeight: 100,
+                objectFit: "contain",
+                backgroundColor: "#FFF5C0",
+              }}
+            />
           </Box>
-
           <StripList />
           <StripForm />
         </div>
